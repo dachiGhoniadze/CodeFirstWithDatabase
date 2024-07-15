@@ -58,6 +58,23 @@ namespace CodeFirstWithDatabase.Controllers
             return top3Services;
         }
 
+
+        // GET: api/Service/CheckUniqueServiceName/{serviceName}
+        [HttpGet("CheckUniqueServiceName/{serviceName}")]
+        public async Task<ActionResult<bool>> CheckUniqueServiceName(string serviceName)
+        {
+            if (_cmsContext.Services == null)
+            {
+                return NotFound();
+            }
+
+            var exists = await _cmsContext.Services
+                .AnyAsync(s => s.ServiceName == serviceName);
+
+            return !exists;
+        }
+
+
         // Put : api/Services/2
         [HttpPut]
         public async Task<ActionResult<Service>> PutService(int id, Service service)
