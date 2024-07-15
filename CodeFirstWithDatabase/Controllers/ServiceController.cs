@@ -42,6 +42,22 @@ namespace CodeFirstWithDatabase.Controllers
             return service;
         }
 
+
+        // GET: api/Service/Top3Expensive
+        [HttpGet("Top3Expensive")]
+        public async Task<ActionResult<IEnumerable<Service>>> GetTop3ExpensiveServices()
+        {
+            if (_cmsContext.Services == null)
+            {
+                return NotFound();
+            }
+            var top3Services = await _cmsContext.Services
+                .OrderByDescending(s => s.Price)
+                .Take(3)
+                .ToListAsync();
+            return top3Services;
+        }
+
         // Put : api/Services/2
         [HttpPut]
         public async Task<ActionResult<Service>> PutService(int id, Service service)
