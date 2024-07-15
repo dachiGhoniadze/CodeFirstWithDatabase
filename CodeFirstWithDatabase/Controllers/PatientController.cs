@@ -43,6 +43,35 @@ namespace CodeFirstWithDatabase.Controllers
             return patient;
         }
 
+        // GET: api/Patient/CountTotal
+        [HttpGet("CountTotal")]
+        public async Task<ActionResult<int>> GetTotalPatients()
+        {
+            if (_cmsContext.Patients == null)
+            {
+                return NotFound();
+            }
+            var totalPatients = await _cmsContext.Patients.CountAsync();
+            return totalPatients;
+        }
+
+        // GET: api/Patient/CountBornBetween1980And2005
+        [HttpGet("CountBornBetween1980And2005")]
+        public async Task<ActionResult<int>> GetPatientsBornBetween1980And2005()
+        {
+            if (_cmsContext.Patients == null)
+            {
+                return NotFound();
+            }
+            var startDate = new DateTime(1980, 1, 1);
+            var endDate = new DateTime(2005, 12, 31);
+            var count = await _cmsContext.Patients
+                .CountAsync(p => p.DateOfBirth >= startDate && p.DateOfBirth <= endDate);
+            return count;
+        }
+
+
+
         // Put : api/Patients/2
         [HttpPut]
         public async Task<ActionResult<Patient>> PutPatient(int id, Patient patient)
