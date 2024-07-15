@@ -57,7 +57,7 @@ namespace CodeFirstWithDatabase.Controllers
 
         // GET: api/Patient/CountBornBetween1980And2005
         [HttpGet("CountBornBetween1980And2005")]
-        public async Task<ActionResult<int>> GetPatientsBornBetween1980And2005()
+        public async Task<ActionResult<int>> GetCountPatientsBornBetween1980And2005()
         {
             if (_cmsContext.Patients == null)
             {
@@ -70,6 +70,21 @@ namespace CodeFirstWithDatabase.Controllers
             return count;
         }
 
+        // GET: api/Patient/BornBetween1980And2005
+        [HttpGet("BornBetween1980And2005")]
+        public async Task<ActionResult<IEnumerable<Patient>>> GetPatientsBornBetween1980And2005()
+        {
+            if (_cmsContext.Patients == null)
+            {
+                return NotFound();
+            }
+            var startDate = new DateTime(1980, 1, 1);
+            var endDate = new DateTime(2005, 12, 31);
+            var patients = await _cmsContext.Patients
+                .Where(p => p.DateOfBirth >= startDate && p.DateOfBirth <= endDate)
+                .ToListAsync();
+            return patients;
+        }
 
 
         // Put : api/Patients/2
